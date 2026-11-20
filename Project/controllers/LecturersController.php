@@ -2,7 +2,7 @@
 /*****************************************
  * Filename : LecturersController.php
  * Programmer : Renaldy Heryana
- * Date : xx-xx-xxxx
+ * Date : 19-11-2026
  * Email : renaldyheryana2@gmail.com
  * Deskripsi : controller untuk CRUD data dosen
  *
@@ -13,7 +13,8 @@ require_once __DIR__ . '/../models/Lecturers.php';
 class LecturersController
 {
     private const MYSQL_DUPLICATE_KEY = 1062;
-    private const INDEX_URL = 'index.php';
+    private const MYSQL_ERROR_FOREIGN = 1451;
+    private const INDEX_URL = 'index.php?page=lecturers;';
     private const VIEW_DIR = __DIR__ . '/../views/lecturers/';
     private const ERROR_EMPTY = 'Semua field wajib diisi.';
     private const ERROR_DUPLICATE = 'NIDN sudah terdaftar.';
@@ -30,10 +31,10 @@ class LecturersController
      *
      * Kompleksitas: waktu O(n), memori O(n).
      */
-    public function index()
+    public function index($error = '')
     {
         $lecturers = $this->model->getLecturers();
-        require self::VIEW_DIR . 'index.php';
+        require self::VIEW_DIR . 'indexLecturer.php';
     }
 
     /**
@@ -58,7 +59,7 @@ class LecturersController
             }
         }
 
-        require self::VIEW_DIR . 'create.php';
+        require self::VIEW_DIR . 'createLecturer.php';
     }
 
     /**
@@ -86,7 +87,7 @@ class LecturersController
             }
         }
 
-        require self::VIEW_DIR . 'edit.php';
+        require self::VIEW_DIR . 'editLecturer.php';
     }
 
     /**
@@ -105,8 +106,14 @@ class LecturersController
         if ($nidn === '' || $this->model->getByNidn($nidn) === null) {
             $this->redirectToIndex();
         }
-
-        $this->model->delete($nidn);
+        try {
+            $this->model->delete($nidn);
+        } catch (mysqli_sql_exception $e) {
+            if ($e->getCode() === self::MYSQL_ERROR_FOREIGN) {
+                return $this->index($e->getMessage());
+            }
+            throw $e;
+        }
         $this->redirectToIndex();
     }
 
