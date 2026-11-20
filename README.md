@@ -242,4 +242,5 @@ Menghubungkan model `Departments` dan `Lecturers` dengan view prodi.
 # DOKUMENTASI
 
 Dokumentasi berupa screen record yang mencoba CRUD pada tabel dosen dan prodi, termasuk penolakan penghapusan dosen yang masih menjadi kaprodi. Video disimpan di folder `Dokumentasi` dengan nama file `Screencast From 2026-11-20 15-56-36.webm`.
-[Screencast From 2026-11-20 15-56-36.webm](https://github.com/user-attachments/assets/9c9c6daa-34ea-4196-90f8-e38baba3f3bb)
+
+https://github.com/user-attachments/assets/c4d5129c-f334-4035-9bb6-3f107ee91f82
